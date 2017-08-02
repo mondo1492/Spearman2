@@ -1,19 +1,35 @@
 const Spear = require('./spear');
 
 class Stickman {
-  constructor(game) {
+  constructor(game, type) {
 
     this.game = game;
+    this.type = type;
+    if (this.type === "user") {
+      this.pos = [150, 500];
+    } else {
+      this.pos = [850, 400];
+    }
+
+  }
+
+  move() {
+
   }
 
   draw(ctx, x, y, scale) {
-    x = 150;
-    y = 500;
+    x = this.pos[0];
+    y = this.pos[1];
     scale = 0.5;
     var canvas = document.getElementById("canvas");
     // let ctx = canvas.getContext("2d");
       ctx.beginPath();
-      ctx.fillStyle = "bisque"; // #ffe4c4
+      if (this.type === "user") {
+        ctx.fillStyle = "bisque";
+      } else {
+        ctx.fillStyle = "red";
+      }
+       // #ffe4c4
       ctx.arc(scale * x, scale * y, scale * 30, 0, Math.PI * 2, true); // draw circle for head
       // (x,y) center, radius, start angle, end angle, anticlockwise
       ctx.fill();
@@ -66,13 +82,14 @@ class Stickman {
       ctx.lineWidth=10;
       ctx.stroke();
     }
-    shootSpear() {
+    shootSpear(theta) {
       // const spear = ;
-      this.game.add(new Spear(this.game));
-      
+      this.game.add(new Spear(this.game, theta));
+
+    }
+    isCollidedWith(otherObject) {
     }
   }
-
 
 
 
