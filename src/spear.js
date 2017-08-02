@@ -1,11 +1,13 @@
 const MovingObject = require('./moving_object');
 
 class Spear extends MovingObject {
-  constructor(options, theta) {
-    super(options, theta);
+  constructor(options, theta, velMultiplier, startPosition) {
+    super(options, theta, velMultiplier, startPosition);
     console.log("OPTIONS", options);
     this.game = options;
     this.theta = theta;
+    this.position = startPosition;
+    this.velMultiplier = velMultiplier;
     console.log("THETTTTAAA", theta);
   }
   remove() {

@@ -233,11 +233,14 @@ class Stickman {
     this.game = game;
     this.type = type;
     if (this.type === "user") {
-      this.pos = [150, 500];
+      this.pos = [150/2, 500/2];
     } else {
-      this.pos = [850, 400];
+      //fix these so guy doesn't go off screen
+      const x = Math.random() * 300 + 300;
+      const y = (Math.random() * 800 + 300)/2;
+      this.pos = [x, y];
     }
-
+    this.radius = 25;
   }
 
   move() {
@@ -247,7 +250,7 @@ class Stickman {
   draw(ctx, x, y, scale) {
     x = this.pos[0];
     y = this.pos[1];
-    scale = 0.5;
+    scale = 1;
     var canvas = document.getElementById("canvas");
     // let ctx = canvas.getContext("2d");
       ctx.beginPath();
@@ -257,61 +260,61 @@ class Stickman {
         ctx.fillStyle = "red";
       }
        // #ffe4c4
-      ctx.arc(scale * x, scale * y, scale * 30, 0, Math.PI * 2, true); // draw circle for head
+      ctx.arc(x, y, 15, 0, Math.PI * 2, true); // draw circle for head
       // (x,y) center, radius, start angle, end angle, anticlockwise
       ctx.fill();
 
       ctx.beginPath();
       ctx.strokeStyle = "black"; // color
       ctx.lineWidth = 3;
-      ctx.arc(scale * x, scale * y, scale * 20, 0, Math.PI, false); // draw semicircle for smiling
+      ctx.arc(x, y+1, 10, 0, Math.PI, false); // draw semicircle for smiling
       ctx.stroke();
 
       // eyes
       ctx.beginPath();
       ctx.fillStyle = "black"; // color
-      ctx.arc(scale * (x-10), scale * (y-5), scale * 3, 0, Math.PI * 2, true); // draw left eye
+      ctx.arc((x-5), (y-2.5), 3, 0, Math.PI * 2, true); // draw left eye
       ctx.fill();
-      ctx.arc(scale * (x+10), scale *(y-5), scale * 3, 0, Math.PI * 2, true); // draw right eye
+      ctx.arc((x+5), scale *(y-2.5), 3, 0, Math.PI * 2, true); // draw right eye
       ctx.fill();
 
       // body
       ctx.beginPath();
-      ctx.moveTo(scale * x, scale * (y+30));
-      ctx.lineTo(scale * x, scale * (y+130));
+      ctx.moveTo(x, (y+15));
+      ctx.lineTo(x, (y+65));
       ctx.strokeStyle = "black";
       ctx.stroke();
 
       // arms
       ctx.beginPath();
       ctx.strokeStyle = "black"; // blue
-      ctx.moveTo(scale * x, scale *(y+30));
-      ctx.lineTo(scale * (x-50), scale * (y+80));
-      ctx.moveTo(scale * x, scale * (y+30));
-      ctx.lineTo(scale * (x+50), scale * (y+80));
+      ctx.moveTo(x, (y+15));
+      ctx.lineTo((x-25), (y+40));
+      ctx.moveTo(x, (y+15));
+      ctx.lineTo((x+25), (y+40));
       ctx.stroke();
 
       // legs
       ctx.beginPath();
       ctx.strokeStyle = "black";
-      ctx.moveTo(scale * x, scale * (y+130));
-      ctx.lineTo(scale * (x-50), scale * (y+230));
-      ctx.moveTo(scale * x, scale * (y+130));
-      ctx.lineTo(scale * (x+50), scale * (y+230));
+      ctx.moveTo(x, (y+65));
+      ctx.lineTo((x-25), (y+115));
+      ctx.moveTo(x, (y+65));
+      ctx.lineTo((x+25), (y+115));
       ctx.stroke();
 
 
       //platform
       ctx.beginPath();
       ctx.strokeStyle = "black";
-      ctx.moveTo(scale * (x + 70), scale * (y+230));
-      ctx.lineTo(scale * (x-70), scale * (y+230));
+      ctx.moveTo((x + 35), (y+115));
+      ctx.lineTo((x-35), (y+115));
       ctx.lineWidth=10;
       ctx.stroke();
     }
-    shootSpear(theta) {
+    shootSpear(theta, velMultiplier) {
       // const spear = ;
-      this.game.add(new Spear(this.game, theta));
+      this.game.add(new Spear(this.game, theta, velMultiplier, this.pos));
 
     }
     isCollidedWith(otherObject) {
@@ -341,6 +344,17 @@ class Game {
     this.throwMeterTail = [];
     // this.addUserStickman();
     this.addEnemyStickman();
+    this.addEnemyAction();
+  }
+
+  addEnemyAction() {
+    setInterval(()=> {
+      this.enemies.forEach( (enemy) => {
+        let enemyTheta = (Math.random() * 200) + 100;
+        enemy.shootSpear(enemyTheta, 1);
+      });
+    }, 2000);
+
   }
 
   add(object) {
@@ -431,14 +445,29 @@ class Game {
     const spears = this.spears;
     console.log(spears);
     const enemies = this.enemies;
+    const stickmen = this.stickmen;
     console.log(enemies);
     if (enemies.length >= 1 && spears.length >= 1) {
       console.log("IN IT!!!!!");
-      if (spears[0].isCollidedWith(enemies[0])) {
-        console.log("HIT!!!!!");
-        debugger
-        const collision = enemies[0].collidedWith(spears[0]);
-        if (collision) return;
+      spears.forEach( (spear) => {
+        enemies.forEach((enemy) => {
+          if (spear.isCollidedWith(enemy)) {
+            console.log("HIT!!!!!");
+            this.enemies.shift();
+            this.addEnemyStickman();
+          }
+        });
+
+        if (spear.isCollidedWith(stickmen[0])) {
+          console.log("HIT!!!!!");
+          this.addEnemyStickman();
+        }
+
+      });
+
+
+        // const collision = enemies[0].collidedWith(spears[0]);
+        // if (collision) return;
       }
     }
 
@@ -458,7 +487,6 @@ class Game {
     //     }
     //   }
     // }
-  }
 }
 
 module.exports = Game;
@@ -466,7 +494,10 @@ module.exports = Game;
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const Util = __webpack_require__(7);
 
 class GameView {
   constructor(game, ctx) {
@@ -504,7 +535,9 @@ class GameView {
       let theta = Math.atan(dy/dx);
       theta *= (180/Math.PI);
       console.log("YOOOOO", theta);
-      stickman.shootSpear(theta);
+      const velMultipier = Util.dist([this.pos[0], this.pos[1]], [x,y]);
+      console.log(velMultipier);
+      stickman.shootSpear(theta, velMultipier);
       document.onmousemove = null;
       this.game.removeMeter();
       //remove tail and throwmeter here
@@ -537,11 +570,13 @@ module.exports = GameView;
 const MovingObject = __webpack_require__(6);
 
 class Spear extends MovingObject {
-  constructor(options, theta) {
-    super(options, theta);
+  constructor(options, theta, velMultiplier, startPosition) {
+    super(options, theta, velMultiplier, startPosition);
     console.log("OPTIONS", options);
     this.game = options;
     this.theta = theta;
+    this.position = startPosition;
+    this.velMultiplier = velMultiplier;
     console.log("THETTTTAAA", theta);
   }
   remove() {
@@ -619,10 +654,13 @@ module.exports = Spear;
 const Util = __webpack_require__(7);
 
 class MovingObject {
-  constructor(options, theta) {
-    this.pos = [80, 380];
-    this.vel = [25, 14];
-    this.radius = 15;
+  constructor(options, theta, velMultiplier, startPosition) {
+    this.pos = [startPosition[0] - 20, startPosition[1] +120];
+    // this.pos = [80, 380];
+    console.log("VELLLL", velMultiplier);
+    this.vel = [40 + (40 * velMultiplier/1000)];
+    // this.vel = [120 * (1 + velMultiplier/100)];
+    this.radius = 5;
     this.color = options.color;
     this.game = options.game;
     this.theta = theta;
@@ -631,7 +669,7 @@ class MovingObject {
     this.pro = {
     				x:80,
     				y:380,
-    				r:15,
+    				r:5,
     				v:10,
     				theta: 65
     				};
@@ -654,15 +692,15 @@ class MovingObject {
 
   move(timeDelta) {
     const velocityScale = (timeDelta / NORMAL_FRAME_TIME_DELTA);
-    this.velocityScale += (.1);
+    this.velocityScale += (1/60);
 
     let v0x = this.vel[0] * Math.cos(this.theta * Math.PI/180);
     let v0y = this.vel[0] * Math.sin(this.theta * Math.PI/180);
     let startX = this.pos[0];
 		let startY = this.pos[1];
-    let g = 9.8 * .4;
-    this.pos[1] = (startY - (( v0y * this.velocityScale * .4- (1/2 * g * Math.pow(this.velocityScale,2)))));
-    this.pos[0] = (startX + (v0x * this.velocityScale *.4));
+    let g = 9.8 ;
+    this.pos[1] = (startY - (( v0y * this.velocityScale * (1/4)- (1/2 * g * Math.pow(this.velocityScale,2)))));
+    this.pos[0] = (startX + (v0x * this.velocityScale * (1/4)));
 
     //timeDelta is number of milliseconds since last move
     //if the computer is busy the time delta will be larger
@@ -672,7 +710,11 @@ class MovingObject {
 
     // this.pos = [this.pos[0] + offsetX, this.pos[1] + offsetY];
     let canvas = document.getElementById('canvas');
-    if (this.pos[1] < 0 || this.pos[0] > canvas.width || isNaN(this.pos[0])) {
+    if (this.pos[1] < -500
+        || this.pos[0] > canvas.width
+        || this.pos[0] < 0    
+        || isNaN(this.pos[0]))
+        {
       this.remove();
     }
   }

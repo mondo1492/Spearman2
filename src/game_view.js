@@ -1,3 +1,5 @@
+const Util = require("./util");
+
 class GameView {
   constructor(game, ctx) {
     this.ctx = ctx;
@@ -34,7 +36,9 @@ class GameView {
       let theta = Math.atan(dy/dx);
       theta *= (180/Math.PI);
       console.log("YOOOOO", theta);
-      stickman.shootSpear(theta);
+      const velMultipier = Util.dist([this.pos[0], this.pos[1]], [x,y]);
+      console.log(velMultipier);
+      stickman.shootSpear(theta, velMultipier);
       document.onmousemove = null;
       this.game.removeMeter();
       //remove tail and throwmeter here

@@ -1,10 +1,13 @@
 const Util = require("./util");
 
 class MovingObject {
-  constructor(options, theta) {
-    this.pos = [80, 380];
-    this.vel = [25, 14];
-    this.radius = 15;
+  constructor(options, theta, velMultiplier, startPosition) {
+    this.pos = [startPosition[0] - 20, startPosition[1] +120];
+    // this.pos = [80, 380];
+    console.log("VELLLL", velMultiplier);
+    this.vel = [40 + (40 * velMultiplier/1000)];
+    // this.vel = [120 * (1 + velMultiplier/100)];
+    this.radius = 5;
     this.color = options.color;
     this.game = options.game;
     this.theta = theta;
@@ -13,7 +16,7 @@ class MovingObject {
     this.pro = {
     				x:80,
     				y:380,
-    				r:15,
+    				r:5,
     				v:10,
     				theta: 65
     				};
@@ -36,15 +39,15 @@ class MovingObject {
 
   move(timeDelta) {
     const velocityScale = (timeDelta / NORMAL_FRAME_TIME_DELTA);
-    this.velocityScale += (.1);
+    this.velocityScale += (1/60);
 
     let v0x = this.vel[0] * Math.cos(this.theta * Math.PI/180);
     let v0y = this.vel[0] * Math.sin(this.theta * Math.PI/180);
     let startX = this.pos[0];
 		let startY = this.pos[1];
-    let g = 9.8 * .4;
-    this.pos[1] = (startY - (( v0y * this.velocityScale * .4- (1/2 * g * Math.pow(this.velocityScale,2)))));
-    this.pos[0] = (startX + (v0x * this.velocityScale *.4));
+    let g = 9.8 ;
+    this.pos[1] = (startY - (( v0y * this.velocityScale * (1/4)- (1/2 * g * Math.pow(this.velocityScale,2)))));
+    this.pos[0] = (startX + (v0x * this.velocityScale * (1/4)));
 
     //timeDelta is number of milliseconds since last move
     //if the computer is busy the time delta will be larger
@@ -54,7 +57,11 @@ class MovingObject {
 
     // this.pos = [this.pos[0] + offsetX, this.pos[1] + offsetY];
     let canvas = document.getElementById('canvas');
-    if (this.pos[1] < 0 || this.pos[0] > canvas.width || isNaN(this.pos[0])) {
+    if (this.pos[1] < -500
+        || this.pos[0] > canvas.width
+        || this.pos[0] < 0    
+        || isNaN(this.pos[0]))
+        {
       this.remove();
     }
   }

@@ -12,6 +12,17 @@ class Game {
     this.throwMeterTail = [];
     // this.addUserStickman();
     this.addEnemyStickman();
+    this.addEnemyAction();
+  }
+
+  addEnemyAction() {
+    setInterval(()=> {
+      this.enemies.forEach( (enemy) => {
+        let enemyTheta = (Math.random() * 200) + 100;
+        enemy.shootSpear(enemyTheta, 1);
+      });
+    }, 2000);
+
   }
 
   add(object) {
@@ -102,14 +113,29 @@ class Game {
     const spears = this.spears;
     console.log(spears);
     const enemies = this.enemies;
+    const stickmen = this.stickmen;
     console.log(enemies);
     if (enemies.length >= 1 && spears.length >= 1) {
       console.log("IN IT!!!!!");
-      if (spears[0].isCollidedWith(enemies[0])) {
-        console.log("HIT!!!!!");
-        debugger
-        const collision = enemies[0].collidedWith(spears[0]);
-        if (collision) return;
+      spears.forEach( (spear) => {
+        enemies.forEach((enemy) => {
+          if (spear.isCollidedWith(enemy)) {
+            console.log("HIT!!!!!");
+            this.enemies.shift();
+            this.addEnemyStickman();
+          }
+        });
+
+        if (spear.isCollidedWith(stickmen[0])) {
+          console.log("HIT!!!!!");
+          this.addEnemyStickman();
+        }
+
+      });
+
+
+        // const collision = enemies[0].collidedWith(spears[0]);
+        // if (collision) return;
       }
     }
 
@@ -129,7 +155,6 @@ class Game {
     //     }
     //   }
     // }
-  }
 }
 
 module.exports = Game;
