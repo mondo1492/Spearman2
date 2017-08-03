@@ -60,15 +60,114 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Game = __webpack_require__(2);
-const GameView = __webpack_require__(3);
+const MovingObject = __webpack_require__(5);
+
+class Spear extends MovingObject {
+  constructor(options, theta, velMultiplier, startPosition, type) {
+    super(options, theta, velMultiplier, startPosition, type);
+    console.log("OPTIONS", options);
+    this.type = type;
+    this.game = options;
+    this.theta = theta;
+    this.position = startPosition;
+    this.velMultiplier = velMultiplier;
+    console.log("THETTTTAAA", theta);
+  }
+  remove() {
+    this.game.remove(this);
+  }
+
+
+}
+
+module.exports = Spear;
+
+
+
+// class Spear {
+//   constructor(game) {
+//     this.game = game;
+//     // this.draw = this.draw();
+//   }
+//
+//   draw(ctx, timeDelta) {
+//     let pro = {
+//     				x:80,
+//     				y:380,
+//     				r:15,
+//     				v:90,
+//     				theta: 45
+//     				};
+//
+// 		let canvas = document.getElementById('canvas');
+// 		// let ctx = canvas.getContext('2d');
+//
+// 		let frameCount = 0;
+// 		let v0x = pro.v * Math.cos(pro.theta * Math.PI/180);
+// 		let v0y = pro.v * Math.sin(pro.theta * Math.PI/180);
+// 		let startX = pro.x;
+// 		let startY = pro.y;
+// 		let g = 9.8;
+// 		setInterval(() =>
+// 		{
+//       console.log("we in here");
+//
+// 			if(pro.y<canvas.height - pro.r && pro.x < canvas.width - pro.r)
+// 			{
+// 				pro.y = startY - ( v0y * frameCount - (1/2 * g * Math.pow(frameCount,2)) );
+// 				pro.x = startX + v0x * frameCount;
+// 			} else {
+//         this.remove();
+//       }
+//
+// 			ctx.save();
+// 				ctx.beginPath();
+// 				ctx.fillStyle = "rgba(0, 200, 0, 0.6)";
+// 				ctx.arc(pro.x,pro.y,pro.r,0,Math.PI*2,true);
+// 				ctx.fill();
+// 				ctx.stroke();
+// 				ctx.closePath();
+// 			ctx.restore();
+// 			frameCount+=.2;
+//
+// 		}, 1000 /77);
+//   }
+//   remove() {
+//     this.game.remove(this);
+//   }
+// }
+//
+// module.exports = Spear;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+const Util = {
+  dist (pos1, pos2) {
+    return Math.sqrt(
+      Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2)
+    );
+  }
+};
+
+module.exports = Util;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Game = __webpack_require__(3);
+const GameView = __webpack_require__(8);
 
 document.addEventListener("DOMContentLoaded", function(){
   const canvasEl = document.getElementById('canvas');
@@ -222,118 +321,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 /***/ }),
-/* 1 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Spear = __webpack_require__(4);
-
-class Stickman {
-  constructor(game, type) {
-
-    this.game = game;
-    this.type = type;
-    if (this.type === "user") {
-      this.pos = [150/2, 500/2];
-    } else {
-      //fix these so guy doesn't go off screen
-      const x = Math.random() * 300 + 300;
-      const y = (Math.random() * 800 + 300)/2;
-      this.pos = [x, y];
-    }
-    this.radius = 25;
-  }
-
-  move() {
-
-  }
-
-  draw(ctx, x, y, scale) {
-    x = this.pos[0];
-    y = this.pos[1];
-    scale = 1;
-    var canvas = document.getElementById("canvas");
-    // let ctx = canvas.getContext("2d");
-      ctx.beginPath();
-      if (this.type === "user") {
-        ctx.fillStyle = "bisque";
-      } else {
-        ctx.fillStyle = "red";
-      }
-       // #ffe4c4
-      ctx.arc(x, y, 15, 0, Math.PI * 2, true); // draw circle for head
-      // (x,y) center, radius, start angle, end angle, anticlockwise
-      ctx.fill();
-
-      ctx.beginPath();
-      ctx.strokeStyle = "black"; // color
-      ctx.lineWidth = 3;
-      ctx.arc(x, y+1, 10, 0, Math.PI, false); // draw semicircle for smiling
-      ctx.stroke();
-
-      // eyes
-      ctx.beginPath();
-      ctx.fillStyle = "black"; // color
-      ctx.arc((x-5), (y-2.5), 3, 0, Math.PI * 2, true); // draw left eye
-      ctx.fill();
-      ctx.arc((x+5), scale *(y-2.5), 3, 0, Math.PI * 2, true); // draw right eye
-      ctx.fill();
-
-      // body
-      ctx.beginPath();
-      ctx.moveTo(x, (y+15));
-      ctx.lineTo(x, (y+65));
-      ctx.strokeStyle = "black";
-      ctx.stroke();
-
-      // arms
-      ctx.beginPath();
-      ctx.strokeStyle = "black"; // blue
-      ctx.moveTo(x, (y+15));
-      ctx.lineTo((x-25), (y+40));
-      ctx.moveTo(x, (y+15));
-      ctx.lineTo((x+25), (y+40));
-      ctx.stroke();
-
-      // legs
-      ctx.beginPath();
-      ctx.strokeStyle = "black";
-      ctx.moveTo(x, (y+65));
-      ctx.lineTo((x-25), (y+115));
-      ctx.moveTo(x, (y+65));
-      ctx.lineTo((x+25), (y+115));
-      ctx.stroke();
-
-
-      //platform
-      ctx.beginPath();
-      ctx.strokeStyle = "black";
-      ctx.moveTo((x + 35), (y+115));
-      ctx.lineTo((x-35), (y+115));
-      ctx.lineWidth=10;
-      ctx.stroke();
-    }
-    shootSpear(theta, velMultiplier) {
-      // const spear = ;
-      this.game.add(new Spear(this.game, theta, velMultiplier, this.pos));
-
-    }
-    isCollidedWith(otherObject) {
-    }
-  }
-
-
-
-module.exports = Stickman;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const Stickman = __webpack_require__(1);
-const Spear = __webpack_require__(4);
-const ThrowMeter = __webpack_require__(8);
-const ThrowMeterTail = __webpack_require__(9);
+const Stickman = __webpack_require__(4);
+const Spear = __webpack_require__(0);
+const ThrowMeter = __webpack_require__(6);
+const ThrowMeterTail = __webpack_require__(7);
 
 class Game {
   constructor() {
@@ -351,9 +345,13 @@ class Game {
     setInterval(()=> {
       this.enemies.forEach( (enemy) => {
         let enemyTheta = (Math.random() * 200) + 100;
-        enemy.shootSpear(enemyTheta, 1);
+        enemy.shootSpear(enemyTheta, 1, "enemy");
       });
     }, 2000);
+
+    setInterval(()=> {
+      this.addEnemyStickman();
+    }, 1000);
 
   }
 
@@ -442,7 +440,7 @@ class Game {
   }
 
   checkCollisions() {
-    const spears = this.spears;
+    const spears = this.spears.filter((spear) => spear.type === "user");
     console.log(spears);
     const enemies = this.enemies;
     const stickmen = this.stickmen;
@@ -454,13 +452,12 @@ class Game {
           if (spear.isCollidedWith(enemy)) {
             console.log("HIT!!!!!");
             this.enemies.shift();
-            this.addEnemyStickman();
           }
         });
 
         if (spear.isCollidedWith(stickmen[0])) {
-          console.log("HIT!!!!!");
-          this.addEnemyStickman();
+          // console.log("HIT!!!!!");
+          // this.addEnemyStickman();
         }
 
       });
@@ -493,168 +490,118 @@ module.exports = Game;
 
 
 /***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-const Util = __webpack_require__(7);
-
-class GameView {
-  constructor(game, ctx) {
-    this.ctx = ctx;
-    this.game = game;
-    this.stickman= this.game.addUserStickman();
-    console.log(this.stickman);
-    this.bindClickHandlers();
-    this.pos = [0,0];
-  }
-
-  bindClickHandlers() {
-    const stickman = this.stickman;
-
-    document.addEventListener('mousedown', (event) => {
-      // stickman.shootSpear();
-      this.pos[0] = event.clientX;
-      this.pos[1] = event.clientY;
-      this.game.addThrowMeter(this.pos[0], this.pos[1]);
-
-      document.onmousemove = (event2) => {
-        let x2 = event2.clientX;
-        let y2 = event2.clientY;
-        this.game.addThrowMeterTail(this.pos[0], this.pos[1], x2, y2);
-      };
-    });
-
-    document.addEventListener('mouseup', (event) => {
-
-      let x = event.clientX;
-      let y = event.clientY;
-
-      let dx =  x - this.pos[0];
-      let dy =  this.pos[1] - y;
-      let theta = Math.atan(dy/dx);
-      theta *= (180/Math.PI);
-      console.log("YOOOOO", theta);
-      const velMultipier = Util.dist([this.pos[0], this.pos[1]], [x,y]);
-      console.log(velMultipier);
-      stickman.shootSpear(theta, velMultipier);
-      document.onmousemove = null;
-      this.game.removeMeter();
-      //remove tail and throwmeter here
-    });
-  }
-
-  start() {
-    this.lastTime = 0;
-    requestAnimationFrame(this.animate.bind(this));
-  }
-
-  animate(time) {
-    const timeDelta = time - this.lastTime;
-    this.game.step(timeDelta);
-    this.game.draw(this.ctx);
-    this.lastTime = time;
-    requestAnimationFrame(this.animate.bind(this));
-  }
-
-
-}
-
-module.exports = GameView;
-
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const MovingObject = __webpack_require__(6);
+const Spear = __webpack_require__(0);
 
-class Spear extends MovingObject {
-  constructor(options, theta, velMultiplier, startPosition) {
-    super(options, theta, velMultiplier, startPosition);
-    console.log("OPTIONS", options);
-    this.game = options;
-    this.theta = theta;
-    this.position = startPosition;
-    this.velMultiplier = velMultiplier;
-    console.log("THETTTTAAA", theta);
+class Stickman {
+  constructor(game, type) {
+
+    this.game = game;
+    this.type = type;
+    if (this.type === "user") {
+      this.pos = [150/2, 500/2];
+    } else {
+      //fix these so guy doesn't go off screen
+      const x = Math.random() * 300 + 300;
+      const y = (Math.random() * 800 + 300)/2;
+      this.pos = [x, y];
+    }
+    this.radius = 25;
   }
-  remove() {
-    this.game.remove(this);
+
+  move() {
+
+  }
+
+  draw(ctx, x, y, scale) {
+    x = this.pos[0];
+    y = this.pos[1];
+    scale = 1;
+    var canvas = document.getElementById("canvas");
+    // let ctx = canvas.getContext("2d");
+      ctx.beginPath();
+      if (this.type === "user") {
+        ctx.fillStyle = "bisque";
+      } else {
+        ctx.fillStyle = "red";
+      }
+       // #ffe4c4
+      ctx.arc(x, y, 15, 0, Math.PI * 2, true); // draw circle for head
+      // (x,y) center, radius, start angle, end angle, anticlockwise
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black"; // color
+      ctx.lineWidth = 3;
+      ctx.arc(x, y+1, 10, 0, Math.PI, false); // draw semicircle for smiling
+      ctx.stroke();
+
+      // eyes
+      ctx.beginPath();
+      ctx.fillStyle = "black"; // color
+      ctx.arc((x-5), (y-2.5), 3, 0, Math.PI * 2, true); // draw left eye
+      ctx.fill();
+      ctx.arc((x+5), scale *(y-2.5), 3, 0, Math.PI * 2, true); // draw right eye
+      ctx.fill();
+
+      // body
+      ctx.beginPath();
+      ctx.moveTo(x, (y+15));
+      ctx.lineTo(x, (y+65));
+      ctx.strokeStyle = "black";
+      ctx.stroke();
+
+      // arms
+      ctx.beginPath();
+      ctx.strokeStyle = "black"; // blue
+      ctx.moveTo(x, (y+15));
+      ctx.lineTo((x-25), (y+40));
+      ctx.moveTo(x, (y+15));
+      ctx.lineTo((x+25), (y+40));
+      ctx.stroke();
+
+      // legs
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(x, (y+65));
+      ctx.lineTo((x-25), (y+115));
+      ctx.moveTo(x, (y+65));
+      ctx.lineTo((x+25), (y+115));
+      ctx.stroke();
+
+
+      //platform
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo((x + 35), (y+115));
+      ctx.lineTo((x-35), (y+115));
+      ctx.lineWidth=10;
+      ctx.stroke();
+    }
+    shootSpear(theta, velMultiplier, type) {
+      // const spear = ;
+      this.game.add(new Spear(this.game, theta, velMultiplier, this.pos, type ));
+
+    }
+    isCollidedWith(otherObject) {
+    }
   }
 
 
-}
 
-module.exports = Spear;
-
-
-
-// class Spear {
-//   constructor(game) {
-//     this.game = game;
-//     // this.draw = this.draw();
-//   }
-//
-//   draw(ctx, timeDelta) {
-//     let pro = {
-//     				x:80,
-//     				y:380,
-//     				r:15,
-//     				v:90,
-//     				theta: 45
-//     				};
-//
-// 		let canvas = document.getElementById('canvas');
-// 		// let ctx = canvas.getContext('2d');
-//
-// 		let frameCount = 0;
-// 		let v0x = pro.v * Math.cos(pro.theta * Math.PI/180);
-// 		let v0y = pro.v * Math.sin(pro.theta * Math.PI/180);
-// 		let startX = pro.x;
-// 		let startY = pro.y;
-// 		let g = 9.8;
-// 		setInterval(() =>
-// 		{
-//       console.log("we in here");
-//
-// 			if(pro.y<canvas.height - pro.r && pro.x < canvas.width - pro.r)
-// 			{
-// 				pro.y = startY - ( v0y * frameCount - (1/2 * g * Math.pow(frameCount,2)) );
-// 				pro.x = startX + v0x * frameCount;
-// 			} else {
-//         this.remove();
-//       }
-//
-// 			ctx.save();
-// 				ctx.beginPath();
-// 				ctx.fillStyle = "rgba(0, 200, 0, 0.6)";
-// 				ctx.arc(pro.x,pro.y,pro.r,0,Math.PI*2,true);
-// 				ctx.fill();
-// 				ctx.stroke();
-// 				ctx.closePath();
-// 			ctx.restore();
-// 			frameCount+=.2;
-//
-// 		}, 1000 /77);
-//   }
-//   remove() {
-//     this.game.remove(this);
-//   }
-// }
-//
-// module.exports = Spear;
+module.exports = Stickman;
 
 
 /***/ }),
-/* 5 */,
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Util = __webpack_require__(7);
+const Util = __webpack_require__(1);
 
 class MovingObject {
-  constructor(options, theta, velMultiplier, startPosition) {
+  constructor(options, theta, velMultiplier, startPosition, type) {
     this.pos = [startPosition[0] - 20, startPosition[1] +120];
     // this.pos = [80, 380];
     console.log("VELLLL", velMultiplier);
@@ -663,6 +610,7 @@ class MovingObject {
     this.radius = 5;
     this.color = options.color;
     this.game = options.game;
+    this.type = type;
     this.theta = theta;
     console.log("THETTTTAAA", theta);
     this.velocityScale = 1;
@@ -712,7 +660,7 @@ class MovingObject {
     let canvas = document.getElementById('canvas');
     if (this.pos[1] < -500
         || this.pos[0] > canvas.width
-        || this.pos[0] < 0    
+        || this.pos[0] < 0
         || isNaN(this.pos[0]))
         {
       this.remove();
@@ -788,22 +736,7 @@ module.exports = MovingObject;
 
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports) {
-
-const Util = {
-  dist (pos1, pos2) {
-    return Math.sqrt(
-      Math.pow(pos1[0] - pos2[0], 2) + Math.pow(pos1[1] - pos2[1], 2)
-    );
-  }
-};
-
-module.exports = Util;
-
-
-/***/ }),
-/* 8 */
+/* 6 */
 /***/ (function(module, exports) {
 
 class ThrowMeter {
@@ -842,7 +775,7 @@ module.exports = ThrowMeter;
 
 
 /***/ }),
-/* 9 */
+/* 7 */
 /***/ (function(module, exports) {
 
 class ThrowMeterTail {
@@ -874,6 +807,76 @@ class ThrowMeterTail {
   }
 }
 module.exports = ThrowMeterTail;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const Util = __webpack_require__(1);
+
+class GameView {
+  constructor(game, ctx) {
+    this.ctx = ctx;
+    this.game = game;
+    this.stickman= this.game.addUserStickman();
+    console.log(this.stickman);
+    this.bindClickHandlers();
+    this.pos = [0,0];
+  }
+
+  bindClickHandlers() {
+    const stickman = this.stickman;
+
+    document.addEventListener('mousedown', (event) => {
+      // stickman.shootSpear();
+      this.pos[0] = event.clientX;
+      this.pos[1] = event.clientY;
+      this.game.addThrowMeter(this.pos[0], this.pos[1]);
+
+      document.onmousemove = (event2) => {
+        let x2 = event2.clientX;
+        let y2 = event2.clientY;
+        this.game.addThrowMeterTail(this.pos[0], this.pos[1], x2, y2);
+      };
+    });
+
+    document.addEventListener('mouseup', (event) => {
+
+      let x = event.clientX;
+      let y = event.clientY;
+
+      let dx =  x - this.pos[0];
+      let dy =  this.pos[1] - y;
+      let theta = Math.atan(dy/dx);
+      theta *= (180/Math.PI);
+      console.log("YOOOOO", theta);
+      const velMultipier = Util.dist([this.pos[0], this.pos[1]], [x,y]);
+      console.log(velMultipier);
+      stickman.shootSpear(theta, velMultipier, "user");
+      document.onmousemove = null;
+      this.game.removeMeter();
+      //remove tail and throwmeter here
+    });
+  }
+
+  start() {
+    this.lastTime = 0;
+    requestAnimationFrame(this.animate.bind(this));
+  }
+
+  animate(time) {
+    const timeDelta = time - this.lastTime;
+    this.game.step(timeDelta);
+    this.game.draw(this.ctx);
+    this.lastTime = time;
+    requestAnimationFrame(this.animate.bind(this));
+  }
+
+
+}
+
+module.exports = GameView;
 
 
 /***/ })

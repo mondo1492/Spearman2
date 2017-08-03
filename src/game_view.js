@@ -38,7 +38,7 @@ class GameView {
       console.log("YOOOOO", theta);
       const velMultipier = Util.dist([this.pos[0], this.pos[1]], [x,y]);
       console.log(velMultipier);
-      stickman.shootSpear(theta, velMultipier);
+      stickman.shootSpear(theta, velMultipier, "user");
       document.onmousemove = null;
       this.game.removeMeter();
       //remove tail and throwmeter here

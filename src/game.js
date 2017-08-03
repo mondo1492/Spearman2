@@ -19,9 +19,13 @@ class Game {
     setInterval(()=> {
       this.enemies.forEach( (enemy) => {
         let enemyTheta = (Math.random() * 200) + 100;
-        enemy.shootSpear(enemyTheta, 1);
+        enemy.shootSpear(enemyTheta, 1, "enemy");
       });
     }, 2000);
+
+    setInterval(()=> {
+      this.addEnemyStickman();
+    }, 1000);
 
   }
 
@@ -110,7 +114,7 @@ class Game {
   }
 
   checkCollisions() {
-    const spears = this.spears;
+    const spears = this.spears.filter((spear) => spear.type === "user");
     console.log(spears);
     const enemies = this.enemies;
     const stickmen = this.stickmen;
@@ -122,13 +126,12 @@ class Game {
           if (spear.isCollidedWith(enemy)) {
             console.log("HIT!!!!!");
             this.enemies.shift();
-            this.addEnemyStickman();
           }
         });
 
         if (spear.isCollidedWith(stickmen[0])) {
-          console.log("HIT!!!!!");
-          this.addEnemyStickman();
+          // console.log("HIT!!!!!");
+          // this.addEnemyStickman();
         }
 
       });

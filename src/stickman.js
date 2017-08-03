@@ -85,9 +85,9 @@ class Stickman {
       ctx.lineWidth=10;
       ctx.stroke();
     }
-    shootSpear(theta, velMultiplier) {
+    shootSpear(theta, velMultiplier, type) {
       // const spear = ;
-      this.game.add(new Spear(this.game, theta, velMultiplier, this.pos));
+      this.game.add(new Spear(this.game, theta, velMultiplier, this.pos, type ));
 
     }
     isCollidedWith(otherObject) {

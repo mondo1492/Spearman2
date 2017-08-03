@@ -1,7 +1,7 @@
 const Util = require("./util");
 
 class MovingObject {
-  constructor(options, theta, velMultiplier, startPosition) {
+  constructor(options, theta, velMultiplier, startPosition, type) {
     this.pos = [startPosition[0] - 20, startPosition[1] +120];
     // this.pos = [80, 380];
     console.log("VELLLL", velMultiplier);
@@ -10,6 +10,7 @@ class MovingObject {
     this.radius = 5;
     this.color = options.color;
     this.game = options.game;
+    this.type = type;
     this.theta = theta;
     console.log("THETTTTAAA", theta);
     this.velocityScale = 1;
@@ -59,7 +60,7 @@ class MovingObject {
     let canvas = document.getElementById('canvas');
     if (this.pos[1] < -500
         || this.pos[0] > canvas.width
-        || this.pos[0] < 0    
+        || this.pos[0] < 0
         || isNaN(this.pos[0]))
         {
       this.remove();
