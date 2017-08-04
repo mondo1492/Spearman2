@@ -14,10 +14,12 @@ class ThrowMeterTail {
   draw(ctx) {
     var canvas = document.getElementById("canvas");
     // let ctx = canvas.getContext("2d");
+    let width = document.body.clientWidth;
       ctx.beginPath();
       ctx.strokeStyle = "black"; // blue
-      ctx.moveTo(this.x - 10, this.y - 65);
-      ctx.lineTo((this.x2-10), (this.y2-65));
+      let adjust = (10 +(width -750)/2);
+      ctx.moveTo(this.x - adjust, this.y - 75);
+      ctx.lineTo((this.x2 - adjust), (this.y2-75));
       // ctx.moveTo(this.x2, (this.y2+30));
       // ctx.lineTo((this.x2+50), (this.y2+80));
       ctx.stroke();

@@ -22,7 +22,6 @@ class Game {
   addEnemyAction() {
     let spearId = 0;
     let shootTime = 1500;
-    console.log("STILL ADDING ENEMYS");
     this.intervals[0] = setInterval(()=> {
       this.enemies.forEach( (enemy) => {
         let enemyTheta = (Math.random() * 200) + 100;
@@ -36,14 +35,12 @@ class Game {
     let enemySpawnTime = 1500;
     this.intervals[1] = setInterval(()=> {
       this.addEnemyStickman(enemyId);
-      console.log("STILL ADDING SPEars");
       enemyId ++;
     }, enemySpawnTime);
 
   }
 
   add(object) {
-    console.log();
    if (object instanceof Stickman && object.type === "enemy") {
      this.enemies.push(object);
    } else if (object instanceof Stickman ) {
@@ -83,7 +80,6 @@ class Game {
   }
 
   moveObjects(delta) {
-    console.log(this.allObjects());
     this.allObjects().forEach((object) => {
       object.move(delta);
     });
@@ -92,14 +88,12 @@ class Game {
 
   addUserStickman() {
     const stickman = new Stickman(this, "user");
-    console.log(stickman);
     this.add(stickman);
     return stickman;
   }
 
   addEnemyStickman(enemyId) {
     const stickman2 = new Stickman(this, "enemy", enemyId);
-    console.log(stickman2);
     this.add(stickman2);
     return stickman2;
   }
@@ -117,8 +111,6 @@ class Game {
   }
 
   remove(object) {
-    console.log("here");
-    console.log(object);
     if (object instanceof Spear) {
       this.spears.splice(this.spears.indexOf(object), 1);
     } else {
@@ -136,16 +128,12 @@ class Game {
     const spearsEnemy = this.spears.filter((spear) => spear.type === "enemy");
     const enemies = this.enemies;
     const stickmen = this.stickmen;
-    console.log(enemies);
     if (enemies.length >= 1) {
-      console.log("IN IT!!!!!");
       spearsUser.forEach( (spear) => {
         enemies.forEach((enemy) => {
           if (spear.isCollidedWith(enemy)) {
-            console.log("HIT!!!!!");
             this.score += 10;
             let enemyIdx = this.enemies.findIndex((enemy2)=> enemy2.enemyId === enemy.enemyId);
-            console.log("IDX", enemyIdx);
             let spearIdx = this.spears.findIndex((spear2)=> spear2.spearId === spear.spearId);
             this.spears.splice(spearIdx, 1);
 
@@ -159,9 +147,6 @@ class Game {
           let spearIdx = this.spears.findIndex((spear2)=> spear2.spearId === spear.spearId);
           this.spears.splice(spearIdx, 1);
           this.lives --;
-          console.log("HITTTTTTTTT");
-          // console.log("HIT!!!!!");
-          // this.addEnemyStickman();
         }
       });
 

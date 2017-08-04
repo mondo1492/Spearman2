@@ -2,9 +2,8 @@ const Util = require("./util");
 
 class MovingObject {
   constructor(options, theta, velMultiplier, startPosition, type, spearId) {
-    this.pos = [startPosition[0] - 20, startPosition[1] +120];
+    this.pos = [startPosition[0] + 20, startPosition[1]+30];
     // this.pos = [80, 380];
-    console.log("VELLLL", velMultiplier);
     this.vel = [40 + (15 * velMultiplier/1000)];
     // this.vel = [120 * (1 + velMultiplier/100)];
     this.radius = 5;
@@ -13,7 +12,6 @@ class MovingObject {
     this.spearId = spearId;
     this.type = type;
     this.theta = theta +20;
-    console.log("THETTTTAAA", theta);
     this.velocityScale = 1;
     this.pro = {
     				x:80,

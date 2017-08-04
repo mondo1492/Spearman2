@@ -15,7 +15,6 @@ class Spearman {
       const canvasEl = document.getElementById('canvas');
       // canvasEl.width = Game.DIM_X;
       // canvasEl.height = Game.DIM_Y;
-      console.log("HELLO");
       const ctx = canvasEl.getContext("2d");
       const game = new Game();
       self.currentGame = new GameView(game, ctx);

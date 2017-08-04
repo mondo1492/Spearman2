@@ -1,5 +1,16 @@
-h2 {
-  font-size: 30px;
+#title {
+  font-size: 34px;
+  border:none;
+  padding: none;
+  margin: none;
+  height: 10px;
+}
+
+#tag {
+  font-size: 15px;
+  border:none;
+  padding: none;
+  margin: none;
 }
 
 #game {
@@ -9,7 +20,9 @@ h2 {
 }
 #canvas {
   border: #666 1px solid;
+  background-color: lightgreen;
 }
+
 
 button {
   display: none;

@@ -91,7 +91,6 @@ class Game {
   addEnemyAction() {
     let spearId = 0;
     let shootTime = 1500;
-    console.log("STILL ADDING ENEMYS");
     this.intervals[0] = setInterval(()=> {
       this.enemies.forEach( (enemy) => {
         let enemyTheta = (Math.random() * 200) + 100;
@@ -105,14 +104,12 @@ class Game {
     let enemySpawnTime = 1500;
     this.intervals[1] = setInterval(()=> {
       this.addEnemyStickman(enemyId);
-      console.log("STILL ADDING SPEars");
       enemyId ++;
     }, enemySpawnTime);
 
   }
 
   add(object) {
-    console.log();
    if (object instanceof Stickman && object.type === "enemy") {
      this.enemies.push(object);
    } else if (object instanceof Stickman ) {
@@ -152,7 +149,6 @@ class Game {
   }
 
   moveObjects(delta) {
-    console.log(this.allObjects());
     this.allObjects().forEach((object) => {
       object.move(delta);
     });
@@ -161,14 +157,12 @@ class Game {
 
   addUserStickman() {
     const stickman = new Stickman(this, "user");
-    console.log(stickman);
     this.add(stickman);
     return stickman;
   }
 
   addEnemyStickman(enemyId) {
     const stickman2 = new Stickman(this, "enemy", enemyId);
-    console.log(stickman2);
     this.add(stickman2);
     return stickman2;
   }
@@ -186,8 +180,6 @@ class Game {
   }
 
   remove(object) {
-    console.log("here");
-    console.log(object);
     if (object instanceof Spear) {
       this.spears.splice(this.spears.indexOf(object), 1);
     } else {
@@ -205,16 +197,12 @@ class Game {
     const spearsEnemy = this.spears.filter((spear) => spear.type === "enemy");
     const enemies = this.enemies;
     const stickmen = this.stickmen;
-    console.log(enemies);
     if (enemies.length >= 1) {
-      console.log("IN IT!!!!!");
       spearsUser.forEach( (spear) => {
         enemies.forEach((enemy) => {
           if (spear.isCollidedWith(enemy)) {
-            console.log("HIT!!!!!");
             this.score += 10;
             let enemyIdx = this.enemies.findIndex((enemy2)=> enemy2.enemyId === enemy.enemyId);
-            console.log("IDX", enemyIdx);
             let spearIdx = this.spears.findIndex((spear2)=> spear2.spearId === spear.spearId);
             this.spears.splice(spearIdx, 1);
 
@@ -228,9 +216,6 @@ class Game {
           let spearIdx = this.spears.findIndex((spear2)=> spear2.spearId === spear.spearId);
           this.spears.splice(spearIdx, 1);
           this.lives --;
-          console.log("HITTTTTTTTT");
-          // console.log("HIT!!!!!");
-          // this.addEnemyStickman();
         }
       });
 
@@ -270,13 +255,11 @@ const MovingObject = __webpack_require__(5);
 class Spear extends MovingObject {
   constructor(options, theta, velMultiplier, startPosition, type, spearId) {
     super(options, theta, velMultiplier, startPosition, type, spearId);
-    console.log("OPTIONS", options);
     this.type = type;
     this.game = options;
     this.theta = theta;
     this.position = startPosition;
     this.velMultiplier = velMultiplier;
-    console.log("THETTTTAAA", theta);
   }
 
   remove() {
@@ -382,7 +365,6 @@ class Spearman {
       const canvasEl = document.getElementById('canvas');
       // canvasEl.width = Game.DIM_X;
       // canvasEl.height = Game.DIM_Y;
-      console.log("HELLO");
       const ctx = canvasEl.getContext("2d");
       const game = new Game();
       self.currentGame = new GameView(game, ctx);
@@ -673,9 +655,8 @@ const Util = __webpack_require__(2);
 
 class MovingObject {
   constructor(options, theta, velMultiplier, startPosition, type, spearId) {
-    this.pos = [startPosition[0] - 20, startPosition[1] +120];
+    this.pos = [startPosition[0] + 20, startPosition[1]+30];
     // this.pos = [80, 380];
-    console.log("VELLLL", velMultiplier);
     this.vel = [40 + (15 * velMultiplier/1000)];
     // this.vel = [120 * (1 + velMultiplier/100)];
     this.radius = 5;
@@ -684,7 +665,6 @@ class MovingObject {
     this.spearId = spearId;
     this.type = type;
     this.theta = theta +20;
-    console.log("THETTTTAAA", theta);
     this.velocityScale = 1;
     this.pro = {
     				x:80,
@@ -825,9 +805,12 @@ class ThrowMeter {
   draw(ctx) {
     var canvas = document.getElementById("canvas");
     // let ctx = canvas.getContext("2d");
+    let width = document.body.clientWidth;
+    console.log("TOTAL WIDTH", width);
+    console.log("TOTAL X", this.x);
       ctx.beginPath();
       ctx.fillStyle = "black";
-      ctx.arc(this.x - 10, this.y - 65, 20, 0, Math.PI * 2, true);
+      ctx.arc(this.x - (10 +(width -750)/2), this.y - 75, 20, 0, Math.PI * 2, true);
       ctx.fill();
 
       // arms
@@ -866,10 +849,12 @@ class ThrowMeterTail {
   draw(ctx) {
     var canvas = document.getElementById("canvas");
     // let ctx = canvas.getContext("2d");
+    let width = document.body.clientWidth;
       ctx.beginPath();
       ctx.strokeStyle = "black"; // blue
-      ctx.moveTo(this.x - 10, this.y - 65);
-      ctx.lineTo((this.x2-10), (this.y2-65));
+      let adjust = (10 +(width -750)/2);
+      ctx.moveTo(this.x - adjust, this.y - 75);
+      ctx.lineTo((this.x2 - adjust), (this.y2-75));
       // ctx.moveTo(this.x2, (this.y2+30));
       // ctx.lineTo((this.x2+50), (this.y2+80));
       ctx.stroke();
@@ -894,7 +879,6 @@ class GameView {
     this.ctx = ctx;
     this.game = game;
     this.stickman= this.game.addUserStickman();
-    console.log(this.stickman);
     this.bindClickHandlers();
     this.pos = [0,0];
     this.paused = false;
@@ -925,9 +909,7 @@ class GameView {
       let dy =  this.pos[1] - y;
       let theta = Math.atan(dy/dx);
       theta *= (180/Math.PI);
-      console.log("YOOOOO", theta);
       const velMultipier = Util.dist([this.pos[0], this.pos[1]], [x,y]);
-      console.log(velMultipier);
       stickman.shootSpear(theta, velMultipier, "user");
       document.onmousemove = null;
       this.game.removeMeter();
@@ -983,7 +965,6 @@ class GameView {
         const canvasEl = document.getElementById('canvas');
         // canvasEl.width = Game.DIM_X;
         // canvasEl.height = Game.DIM_Y;
-        console.log("HELLO");
         const ctx = canvasEl.getContext("2d");
         const game = new Game();
         this.currentGame = new GameView(game, ctx);

@@ -7,7 +7,6 @@ class GameView {
     this.ctx = ctx;
     this.game = game;
     this.stickman= this.game.addUserStickman();
-    console.log(this.stickman);
     this.bindClickHandlers();
     this.pos = [0,0];
     this.paused = false;
@@ -38,9 +37,7 @@ class GameView {
       let dy =  this.pos[1] - y;
       let theta = Math.atan(dy/dx);
       theta *= (180/Math.PI);
-      console.log("YOOOOO", theta);
       const velMultipier = Util.dist([this.pos[0], this.pos[1]], [x,y]);
-      console.log(velMultipier);
       stickman.shootSpear(theta, velMultipier, "user");
       document.onmousemove = null;
       this.game.removeMeter();
@@ -96,7 +93,6 @@ class GameView {
         const canvasEl = document.getElementById('canvas');
         // canvasEl.width = Game.DIM_X;
         // canvasEl.height = Game.DIM_Y;
-        console.log("HELLO");
         const ctx = canvasEl.getContext("2d");
         const game = new Game();
         this.currentGame = new GameView(game, ctx);
