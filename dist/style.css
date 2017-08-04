@@ -1,0 +1,31 @@
+h2 {
+  font-size: 30px;
+}
+
+#game {
+  display: flex;
+  justify-content: center;
+
+}
+#canvas {
+  border: #666 1px solid;
+}
+
+button {
+  display: none;
+  justify-content: center;
+  position: fixed;
+  width: 75%;
+  left: 50%;
+  margin-left: -37.5%;
+  // margin-left: -37.5%;
+  // left: 45vw;
+  top: 400px;
+  font-size: 75px;
+  border: none;
+  background: none;
+  outline: none;
+}
+button:hover {
+  color: green;
+}

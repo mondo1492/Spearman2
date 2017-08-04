@@ -1,15 +1,56 @@
 const Game = require("./game");
 const GameView = require("./game_view");
 
-document.addEventListener("DOMContentLoaded", function(){
-  const canvasEl = document.getElementById('canvas');
-  // canvasEl.width = Game.DIM_X;
-  // canvasEl.height = Game.DIM_Y;
 
-  const ctx = canvasEl.getContext("2d");
-  const game = new Game();
-  new GameView(game, ctx).start();
-});
+
+class Spearman {
+  constructor() {
+    this.currentGame = null;
+    this.startGame();
+  }
+
+  startGame() {
+    let self = this;
+    document.addEventListener("DOMContentLoaded", function(){
+      const canvasEl = document.getElementById('canvas');
+      // canvasEl.width = Game.DIM_X;
+      // canvasEl.height = Game.DIM_Y;
+      console.log("HELLO");
+      const ctx = canvasEl.getContext("2d");
+      const game = new Game();
+      self.currentGame = new GameView(game, ctx);
+      self.currentGame.start();
+    });
+    // this.pauseGame();
+    // let pauseButton = document.getElementById("pause-button");
+    // pauseButton.addEventListener('click', (event) => {
+    //   if (this.currentGame.paused === false) {
+    //     this.currentGame.paused = true;
+    //   } else {
+    //     this.currentGame.paused = false;
+    //   }
+    //   this.currentGame.pause();
+    //   console.log("WHHOOOOAH");
+    // });
+  }
+  //
+  // pauseGame() {
+  //   let pauseButton = document.getElementById("pause-button");
+  //   pauseButton.addEventListener('click', (event) => {
+  //
+  //     if (this.currentGame.paused === false) {
+  //       this.currentGame.paused = true;
+  //     } else {
+  //       this.currentGame.paused = false;
+  //     }
+  //     this.currentGame.pause();
+  //     console.log("this.currentGame", this.currentGame);
+  //   });
+  // }
+}
+
+new Spearman();
+module.exports = Spearman;
 
 
 

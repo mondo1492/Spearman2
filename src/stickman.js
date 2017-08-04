@@ -1,16 +1,16 @@
 const Spear = require('./spear');
 
 class Stickman {
-  constructor(game, type) {
-
+  constructor(game, type, enemyId) {
+    this.enemyId = enemyId;
     this.game = game;
     this.type = type;
     if (this.type === "user") {
       this.pos = [150/2, 500/2];
     } else {
       //fix these so guy doesn't go off screen
-      const x = Math.random() * 300 + 300;
-      const y = (Math.random() * 800 + 300)/2;
+      const x = Math.random() * 425 + 275;
+      const y = Math.random() * 435 + 45;
       this.pos = [x, y];
     }
     this.radius = 25;
@@ -85,9 +85,9 @@ class Stickman {
       ctx.lineWidth=10;
       ctx.stroke();
     }
-    shootSpear(theta, velMultiplier, type) {
+    shootSpear(theta, velMultiplier, type, spearId) {
       // const spear = ;
-      this.game.add(new Spear(this.game, theta, velMultiplier, this.pos, type ));
+      this.game.add(new Spear(this.game, theta, velMultiplier, this.pos, type, spearId));
 
     }
     isCollidedWith(otherObject) {

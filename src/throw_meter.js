@@ -13,7 +13,7 @@ class ThrowMeter {
     var canvas = document.getElementById("canvas");
     // let ctx = canvas.getContext("2d");
       ctx.beginPath();
-      ctx.fillStyle = "green";
+      ctx.fillStyle = "black";
       ctx.arc(this.x - 10, this.y - 65, 20, 0, Math.PI * 2, true);
       ctx.fill();
 

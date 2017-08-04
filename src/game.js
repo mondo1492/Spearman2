@@ -10,22 +10,34 @@ class Game {
     this.spears = [];
     this.throwMeter = [];
     this.throwMeterTail = [];
+    this.lives = 3;
+    this.score = 0;
+    this.intervals = [];
     // this.addUserStickman();
     this.addEnemyStickman();
     this.addEnemyAction();
   }
 
   addEnemyAction() {
-    setInterval(()=> {
+    let spearId = 0;
+    let shootTime = 1500;
+    console.log("STILL ADDING ENEMYS");
+    this.intervals[0] = setInterval(()=> {
       this.enemies.forEach( (enemy) => {
         let enemyTheta = (Math.random() * 200) + 100;
-        enemy.shootSpear(enemyTheta, 1, "enemy");
-      });
-    }, 2000);
+        enemy.shootSpear(enemyTheta, 1, "enemy", spearId);
+        spearId ++;
 
-    setInterval(()=> {
-      this.addEnemyStickman();
-    }, 1000);
+      });
+    }, shootTime);
+
+    let enemyId = 0;
+    let enemySpawnTime = 1500;
+    this.intervals[1] = setInterval(()=> {
+      this.addEnemyStickman(enemyId);
+      console.log("STILL ADDING SPEars");
+      enemyId ++;
+    }, enemySpawnTime);
 
   }
 
@@ -54,6 +66,9 @@ class Game {
 
   draw(ctx) {
     ctx.clearRect(0, 0, 750, 600);
+    ctx.font = "30px Arial";
+    ctx.fillText(`Lives: ${this.lives}`,10,50);
+    ctx.fillText(`Score: ${this.score}`,600,50);
     this.allObjects().forEach((object) => {
       object.draw(ctx);
     });
@@ -79,8 +94,8 @@ class Game {
     return stickman;
   }
 
-  addEnemyStickman() {
-    const stickman2 = new Stickman(this, "enemy");
+  addEnemyStickman(enemyId) {
+    const stickman2 = new Stickman(this, "enemy", enemyId);
     console.log(stickman2);
     this.add(stickman2);
     return stickman2;
@@ -114,26 +129,37 @@ class Game {
   }
 
   checkCollisions() {
-    const spears = this.spears.filter((spear) => spear.type === "user");
-    console.log(spears);
+    const spearsUser = this.spears.filter((spear) => spear.type === "user");
+    const spearsEnemy = this.spears.filter((spear) => spear.type === "enemy");
     const enemies = this.enemies;
     const stickmen = this.stickmen;
     console.log(enemies);
-    if (enemies.length >= 1 && spears.length >= 1) {
+    if (enemies.length >= 1) {
       console.log("IN IT!!!!!");
-      spears.forEach( (spear) => {
+      spearsUser.forEach( (spear) => {
         enemies.forEach((enemy) => {
           if (spear.isCollidedWith(enemy)) {
             console.log("HIT!!!!!");
-            this.enemies.shift();
+            this.score += 10;
+            let enemyIdx = this.enemies.findIndex((enemy2)=> enemy2.enemyId === enemy.enemyId);
+            console.log("IDX", enemyIdx);
+            let spearIdx = this.spears.findIndex((spear2)=> spear2.spearId === spear.spearId);
+            this.spears.splice(spearIdx, 1);
+
+            this.enemies.splice(enemyIdx,1);
           }
         });
+      });
 
+      spearsEnemy.forEach( (spear) => {
         if (spear.isCollidedWith(stickmen[0])) {
+          let spearIdx = this.spears.findIndex((spear2)=> spear2.spearId === spear.spearId);
+          this.spears.splice(spearIdx, 1);
+          this.lives --;
+          console.log("HITTTTTTTTT");
           // console.log("HIT!!!!!");
           // this.addEnemyStickman();
         }
-
       });
 
 

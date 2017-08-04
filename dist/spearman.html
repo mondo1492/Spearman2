@@ -3,16 +3,19 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-    <style>
+    <link href="style.css" type="text/css" rel="stylesheet">
 
-      canvas { border: #666 1px solid;}
-      </style>
   </head>
-  <body>
+  <body id="body">
     <script type="application/javascript" src="bundle.js"></script>
-    <h2> hello </h2>
-
-    <canvas id="canvas" width = "750" height = "600"></canvas>
-
+    <div className="header">
+      <h2>Ball Stickman!</h2>
+    </div>
+    <div id="game">
+      <canvas id="canvas" width = "750" height = "600"></canvas>
+    </div>
+    <div id="buttons">
+      <button id="reset-button">Play Again? </button>
+    </div>
   </body>
 </html>
