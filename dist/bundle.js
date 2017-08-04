@@ -960,13 +960,14 @@ class GameView {
       this.ctx.clearRect(0, 0, 750, 600);
       this.ctx.font = "100px Arial";
       this.ctx.fillText("GAME OVER",60,200);
-      // this.game.stickmen = [];
-      // this.game.enemies = [];
-      // this.game.spears = [];
-      // this.game.throwMeter = [];
-      // this.game.throwMeterTail = [];
-      // this.game.lives = -1;
-      // this.game.score = 0;
+      this.game.stickmen = [];
+      this.game.enemies = [];
+      this.game.spears = [];
+      this.game.throwMeter = [];
+      this.game.throwMeterTail = [];
+      this.game.all = [];
+      this.game.lives = -1;
+      this.game.score = 0;
       this.game.intervals.forEach((interval) => {
         clearInterval(interval);
       });
