@@ -10,7 +10,7 @@ class Game {
     this.spears = [];
     this.throwMeter = [];
     this.throwMeterTail = [];
-    this.lives = 0;
+    this.lives = 3;
     this.score = 0;
     this.intervals = [];
     this.all = [];
