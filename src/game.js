@@ -10,9 +10,10 @@ class Game {
     this.spears = [];
     this.throwMeter = [];
     this.throwMeterTail = [];
-    this.lives = 3;
+    this.lives = 0;
     this.score = 0;
     this.intervals = [];
+    this.all = [];
     // this.addUserStickman();
     this.addEnemyStickman();
     this.addEnemyAction();
@@ -61,7 +62,9 @@ class Game {
 
 
   allObjects() {
-    return [].concat(this.stickmen, this.enemies, this.spears, this.throwMeter, this.throwMeterTail);
+    let add = [].concat(this.stickmen, this.enemies, this.spears, this.throwMeter, this.throwMeterTail);
+    this.all = add;
+    return this.all;
   }
 
   draw(ctx) {
